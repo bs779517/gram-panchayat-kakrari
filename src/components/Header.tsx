@@ -9,10 +9,11 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3 text-2xl font-bold font-headline text-primary">
             <div className="relative w-12 h-12">
               <Image 
-                src="https://storage.googleapis.com/project-spark-341200.appspot.com/images%2Fteams%2Fteam_1724068777011_86400%2FGENERATED_1724070004077.png" 
-                alt="ग्राम पंचायत ककरारी logo" 
+                src="https://picsum.photos/seed/logo/128/128" 
+                alt="ग्राम पंचायत ककरारी logo"
+                data-ai-hint="logo"
                 fill
-                className="object-contain"
+                className="object-contain rounded-full"
               />
             </div>
             <span className="hidden sm:inline">ग्राम पंचायत ककरारी</span>
