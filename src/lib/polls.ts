@@ -27,6 +27,12 @@ const polls: Poll[] = [
     }
 ];
 
+// In-memory store for votes by IP
+const votesByIp: Record<string, string[]> = {
+    '1': ['127.0.0.1'] // Example: IP '127.0.0.1' has voted on poll '1'
+};
+
+
 export function getPolls(): Poll[] {
     return polls;
 }
@@ -46,11 +52,20 @@ export function createPoll(question: string, options: { text: string; imageUrl?:
   return newPoll;
 }
 
-export function addVote(pollId: string, optionIndex: number): Poll | undefined {
+export function addVote(pollId: string, optionIndex: number, ip: string): Poll | 'already_voted' | undefined {
     const poll = getPoll(pollId);
     if (!poll || optionIndex < 0 || optionIndex >= poll.options.length) {
         return undefined;
     }
+
+    if (votesByIp[pollId]?.includes(ip)) {
+        return 'already_voted';
+    }
+
+    if (!votesByIp[pollId]) {
+        votesByIp[pollId] = [];
+    }
+    votesByIp[pollId].push(ip);
 
     // This is a new object to ensure we don't mutate the original in-memory data directly
     // in a way that would cause issues with React's change detection if we were using state management libraries.

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { type Poll } from '@/lib/polls';
 import { PollVoteForm } from './PollVoteForm';
 import { PollResults } from './PollResults';
@@ -15,6 +15,7 @@ type PollContainerProps = {
 export function PollContainer({ initialPoll }: PollContainerProps) {
   const [poll, setPoll] = useState(initialPoll);
   const [hasVoted, setHasVoted] = useState(false);
+  const [isVoting, startTransition] = useTransition();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -25,23 +26,26 @@ export function PollContainer({ initialPoll }: PollContainerProps) {
   }, [poll.id]);
 
   const handleVote = async (optionIndex: number) => {
-    const result = await voteAction(poll.id, optionIndex);
+    startTransition(async () => {
+      const result = await voteAction(poll.id, optionIndex);
 
-    if (result.success && result.poll) {
-      setPoll(result.poll);
-      setHasVoted(true);
-      localStorage.setItem(`poll-voted-${poll.id}`, 'true');
-      toast({
-        title: "Vote cast!",
-        description: "Thanks for participating!",
-      });
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: result.error || "Failed to cast vote.",
-      });
-    }
+      if (result.success && result.poll) {
+        setPoll(result.poll);
+        setHasVoted(true);
+        localStorage.setItem(`poll-voted-${poll.id}`, 'true');
+        toast({
+          title: "Vote cast!",
+          description: "Thanks for participating!",
+        });
+      } else {
+        setHasVoted(true); // Also set to true to show results even if they already voted
+        toast({
+          variant: "destructive",
+          title: "Vote failed",
+          description: result.error || "Failed to cast vote.",
+        });
+      }
+    });
   };
 
   return (
@@ -59,7 +63,7 @@ export function PollContainer({ initialPoll }: PollContainerProps) {
           {hasVoted ? (
             <PollResults poll={poll} />
           ) : (
-            <PollVoteForm poll={poll} onVote={handleVote} />
+            <PollVoteForm poll={poll} onVote={handleVote} isVoting={isVoting}/>
           )}
         </CardContent>
       </Card>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { type Poll } from '@/lib/polls';
 import { Button } from './ui/button';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
@@ -12,18 +12,16 @@ import { ImageIcon } from 'lucide-react';
 type PollVoteFormProps = {
   poll: Poll;
   onVote: (optionIndex: number) => Promise<void>;
+  isVoting: boolean;
 };
 
-export function PollVoteForm({ poll, onVote }: PollVoteFormProps) {
+export function PollVoteForm({ poll, onVote, isVoting }: PollVoteFormProps) {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedOption === null) return;
-    startTransition(() => {
-      onVote(selectedOption);
-    });
+    onVote(selectedOption);
   };
 
   return (
@@ -32,6 +30,7 @@ export function PollVoteForm({ poll, onVote }: PollVoteFormProps) {
         onValueChange={(value) => setSelectedOption(Number(value))}
         className="space-y-4"
         aria-label="Poll options"
+        disabled={isVoting}
       >
         {poll.options.map((option, index) => (
           <Label 
@@ -40,7 +39,8 @@ export function PollVoteForm({ poll, onVote }: PollVoteFormProps) {
             className={cn(
                 "flex items-center space-x-4 rounded-md border p-4 transition-colors cursor-pointer",
                 "hover:bg-accent/50",
-                selectedOption === index && "bg-accent/20 border-accent"
+                selectedOption === index && "bg-accent/20 border-accent",
+                isVoting && "cursor-not-allowed opacity-70"
             )}
             >
             <RadioGroupItem value={index.toString()} id={`option-${index}`} className="h-6 w-6"/>
@@ -59,10 +59,10 @@ export function PollVoteForm({ poll, onVote }: PollVoteFormProps) {
       </RadioGroup>
       <Button
         type="submit"
-        disabled={selectedOption === null || isPending}
+        disabled={selectedOption === null || isVoting}
         className={cn("w-full bg-accent text-accent-foreground hover:bg-accent/90 text-lg py-6")}
       >
-        {isPending ? "Voting..." : "Vote"}
+        {isVoting ? "Voting..." : "Vote"}
       </Button>
     </form>
   );

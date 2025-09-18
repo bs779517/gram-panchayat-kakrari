@@ -1,7 +1,9 @@
 'use server';
 
 import { suggestQuestion as suggestQuestionFlow } from '@/ai/flows/ai-suggest-question';
-import { createPoll, addVote } from '@/lib/polls';
+import { addVote } from '@/lib/polls';
+import { createPoll } from '@/lib/polls';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -48,12 +50,21 @@ export async function suggestQuestionAction(topic: string) {
 
 export async function voteAction(pollId: string, optionIndex: number) {
   'use server';
+  const ip = headers().get('x-forwarded-for') || '127.0.0.1';
+
   try {
-    const updatedPoll = addVote(pollId, optionIndex);
-    if (!updatedPoll) {
+    const result = addVote(pollId, optionIndex, ip);
+    
+    if (result === 'already_voted') {
+      return { success: false, error: 'You have already voted on this poll.' };
+    }
+    
+    if (!result) {
       throw new Error('Poll not found or invalid option.');
     }
-    return { success: true, poll: updatedPoll };
+    
+    return { success: true, poll: result };
+
   } catch (error: any) {
     return { success: false, error: error.message };
   }
