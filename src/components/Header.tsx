@@ -9,9 +9,9 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3 text-2xl font-bold font-headline text-primary">
             <div className="relative w-12 h-12">
               <Image 
-                src="https://picsum.photos/seed/logo/128/128" 
+                src="https://picsum.photos/seed/farmer/128/128" 
                 alt="ग्राम पंचायत ककरारी logo"
-                data-ai-hint="logo"
+                data-ai-hint="farmer"
                 fill
                 className="object-contain rounded-full"
               />
