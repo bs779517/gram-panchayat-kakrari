@@ -110,21 +110,21 @@ export function CreatePollForm() {
             name="question"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg font-semibold">आपका सवाल</FormLabel>
+                <FormLabel className="text-lg font-semibold">Your Question</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="जैसे, सबसे अच्छा पिज्जा टॉपिंग क्या है?" {...field} className="text-base" />
+                  <Textarea placeholder="e.g., What's the best pizza topping?" {...field} className="text-base" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           
-          {isSuggesting && <div className="flex items-center text-sm text-muted-foreground"><WandSparkles className="mr-2 h-4 w-4 animate-spin" /> एक बेहतर सवाल के बारे में सोच रहा हूँ...</div>}
+          {isSuggesting && <div className="flex items-center text-sm text-muted-foreground"><WandSparkles className="mr-2 h-4 w-4 animate-spin" /> Thinking of a better question...</div>}
           
           {suggestion?.shouldSuggest && (
             <Alert className="bg-primary/10 border-primary/50">
               <Lightbulb className="h-4 w-4 text-primary" />
-              <AlertTitle className="font-semibold text-primary">AI सुझाव</AlertTitle>
+              <AlertTitle className="font-semibold text-primary">AI Suggestion</AlertTitle>
               <AlertDescription>
                 <p className="mb-2">"{suggestion.question}"</p>
                 <Button
@@ -137,14 +137,14 @@ export function CreatePollForm() {
                   }}
                   className="bg-background"
                 >
-                  इस प्रश्न का प्रयोग करें
+                  Use this question
                 </Button>
               </AlertDescription>
             </Alert>
           )}
 
           <div className="space-y-4">
-            <FormLabel className="text-lg font-semibold">उत्तर विकल्प</FormLabel>
+            <FormLabel className="text-lg font-semibold">Answer Options</FormLabel>
             {fields.map((field, index) => (
               <div key={field.id} className="space-y-3 p-4 border rounded-lg bg-secondary/50">
                 <FormField
@@ -152,10 +152,10 @@ export function CreatePollForm() {
                   name={`options.${index}.text`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>विकल्प {index + 1}</FormLabel>
+                      <FormLabel>Option {index + 1}</FormLabel>
                       <FormControl>
                         <div className="flex items-center gap-2">
-                          <Input placeholder={`विकल्प ${index + 1} पाठ`} {...field} className="bg-background" />
+                          <Input placeholder={`Option ${index + 1} text`} {...field} className="bg-background" />
                           {fields.length > 2 && (
                             <Button
                               type="button"
@@ -178,7 +178,7 @@ export function CreatePollForm() {
                   name={`options.${index}.imageUrl`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs text-muted-foreground">छवि यूआरएल (वैकल्पिक)</FormLabel>
+                      <FormLabel className="text-xs text-muted-foreground">Image URL (Optional)</FormLabel>
                       <FormControl>
                         <div className="relative">
                             <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -203,7 +203,7 @@ export function CreatePollForm() {
               onClick={() => append({ text: "", imageUrl: "" })}
             >
               <PlusCircle className="mr-2 h-4 w-4" />
-              विकल्प जोड़ें
+              Add Option
             </Button>
           </div>
 
@@ -212,7 +212,7 @@ export function CreatePollForm() {
             disabled={isPending}
             className={cn("w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6 font-bold")}
           >
-            {isPending ? "बना रहा है..." : "पोल बनाएं"}
+            {isPending ? "Creating..." : "Create Poll"}
           </Button>
         </form>
       </Form>
