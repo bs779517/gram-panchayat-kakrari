@@ -7,16 +7,16 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center h-20">
           <Link href="/" className="flex items-center gap-3 text-2xl font-bold font-headline text-primary">
-            <div className="relative w-10 h-10">
+            <div className="relative w-16 h-16">
               <Image 
-                src="https://picsum.photos/seed/polllogo/200/200" 
-                alt="Janmat logo"
-                data-ai-hint="abstract poll logo"
+                src="https://picsum.photos/seed/tree/200" 
+                alt="ग्राम पंचायत ककरारी logo"
+                data-ai-hint="tree nature"
                 fill
-                className="object-cover rounded-full"
+                className="object-contain"
               />
             </div>
-            <span className="hidden sm:inline">Janmat</span>
+            <span className="hidden sm:inline">ग्राम पंचायत ककरारी</span>
           </Link>
         </div>
       </div>

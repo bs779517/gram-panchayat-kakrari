@@ -6,9 +6,9 @@ export default function Home() {
     <div className="max-w-2xl mx-auto">
       <Card className="shadow-2xl">
         <CardHeader>
-          <CardTitle className="font-headline text-3xl text-center">Create a New Poll</CardTitle>
+          <CardTitle className="font-headline text-3xl text-center">एक नया पोल बनाएं</CardTitle>
           <CardDescription className="text-center text-lg pt-2">
-            Ask a question and get instant feedback from your community.
+            एक प्रश्न पूछें और अपने समुदाय से तुरंत प्रतिक्रिया प्राप्त करें।
           </CardDescription>
         </CardHeader>
         <CardContent>
