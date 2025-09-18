@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/Header';
 
 export const metadata: Metadata = {
-  title: 'Poll Party',
+  title: 'ग्राम पंचायत ककरारी',
   description: 'Create and vote on polls',
 };
 
