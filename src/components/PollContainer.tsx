@@ -50,11 +50,11 @@ export function PollContainer({ initialPoll }: PollContainerProps) {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <Card>
+      <Card className="shadow-2xl">
         <CardHeader>
           <CardTitle className="font-headline text-3xl text-center">{poll.question}</CardTitle>
           {hasVoted && (
-             <CardDescription className="text-center pt-2">
+             <CardDescription className="text-center pt-4 text-base font-semibold">
                 Total Votes: {poll.totalVotes}
              </CardDescription>
           )}

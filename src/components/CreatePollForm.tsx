@@ -110,9 +110,9 @@ export function CreatePollForm() {
             name="question"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg">Your Question</FormLabel>
+                <FormLabel className="text-lg font-semibold">Your Question</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="e.g., What's the best pizza topping?" {...field} />
+                  <Textarea placeholder="e.g., What's the best pizza topping?" {...field} className="text-base" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -124,7 +124,7 @@ export function CreatePollForm() {
           {suggestion?.shouldSuggest && (
             <Alert className="bg-primary/10 border-primary/50">
               <Lightbulb className="h-4 w-4 text-primary" />
-              <AlertTitle className="font-headline text-primary">AI Suggestion</AlertTitle>
+              <AlertTitle className="font-semibold text-primary">AI Suggestion</AlertTitle>
               <AlertDescription>
                 <p className="mb-2">"{suggestion.question}"</p>
                 <Button
@@ -144,9 +144,9 @@ export function CreatePollForm() {
           )}
 
           <div className="space-y-4">
-            <FormLabel className="text-lg">Answer Options</FormLabel>
+            <FormLabel className="text-lg font-semibold">Answer Options</FormLabel>
             {fields.map((field, index) => (
-              <div key={field.id} className="space-y-2 p-4 border rounded-lg">
+              <div key={field.id} className="space-y-3 p-4 border rounded-lg bg-secondary/50">
                 <FormField
                   control={form.control}
                   name={`options.${index}.text`}
@@ -155,13 +155,14 @@ export function CreatePollForm() {
                       <FormLabel>Option {index + 1}</FormLabel>
                       <FormControl>
                         <div className="flex items-center gap-2">
-                          <Input placeholder={`Option ${index + 1} text`} {...field} />
+                          <Input placeholder={`Option ${index + 1} text`} {...field} className="bg-background" />
                           {fields.length > 2 && (
                             <Button
                               type="button"
                               variant="ghost"
                               size="icon"
                               onClick={() => remove(index)}
+                              className="text-muted-foreground hover:text-destructive"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -177,11 +178,11 @@ export function CreatePollForm() {
                   name={`options.${index}.imageUrl`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Image URL (Optional)</FormLabel>
+                      <FormLabel className="text-xs text-muted-foreground">Image URL (Optional)</FormLabel>
                       <FormControl>
                         <div className="relative">
                             <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input placeholder="https://example.com/image.png" {...field} className="pl-10" />
+                            <Input placeholder="https://example.com/image.png" {...field} className="pl-10 bg-background" />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -189,7 +190,7 @@ export function CreatePollForm() {
                   )}
                 />
                 {optionsValue[index]?.imageUrl && (
-                  <div className="w-24 h-24 relative rounded-md overflow-hidden">
+                  <div className="w-24 h-24 relative rounded-md overflow-hidden border">
                     <Image src={optionsValue[index].imageUrl!} alt={`Option ${index+1} preview`} fill style={{objectFit: 'cover'}} />
                   </div>
                 )}
@@ -209,7 +210,7 @@ export function CreatePollForm() {
           <Button
             type="submit"
             disabled={isPending}
-            className={cn("w-full bg-accent text-accent-foreground hover:bg-accent/90 text-lg py-6")}
+            className={cn("w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6 font-bold")}
           >
             {isPending ? "Creating..." : "Create Poll"}
           </Button>

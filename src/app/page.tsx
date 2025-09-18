@@ -4,11 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 export default function Home() {
   return (
     <div className="max-w-2xl mx-auto">
-      <Card>
+      <Card className="shadow-2xl">
         <CardHeader>
           <CardTitle className="font-headline text-3xl text-center">Create a New Poll</CardTitle>
-          <CardDescription className="text-center">
-            Got a burning question? Let's get some answers!
+          <CardDescription className="text-center text-lg pt-2">
+            Ask a question and get instant feedback from your community.
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -37,32 +37,32 @@ export function PollVoteForm({ poll, onVote, isVoting }: PollVoteFormProps) {
             key={index} 
             htmlFor={`option-${index}`}
             className={cn(
-                "flex items-center space-x-4 rounded-md border p-4 transition-colors cursor-pointer",
-                "hover:bg-accent/50",
-                selectedOption === index && "bg-accent/20 border-accent",
+                "flex items-center space-x-4 rounded-lg border p-4 transition-all cursor-pointer",
+                "hover:bg-accent/10 hover:border-accent",
+                selectedOption === index && "bg-accent/20 border-accent ring-2 ring-accent",
                 isVoting && "cursor-not-allowed opacity-70"
             )}
             >
-            <RadioGroupItem value={index.toString()} id={`option-${index}`} className="h-6 w-6"/>
+            <RadioGroupItem value={index.toString()} id={`option-${index}`} className="h-6 w-6 border-muted-foreground"/>
             {option.imageUrl ? (
-              <div className="w-20 h-20 relative rounded-md overflow-hidden flex-shrink-0">
+              <div className="w-20 h-20 relative rounded-md overflow-hidden flex-shrink-0 border">
                 <Image src={option.imageUrl} alt={option.text} fill style={{objectFit: 'cover'}} />
               </div>
             ) : (
-                <div className="w-20 h-20 rounded-md bg-muted flex items-center justify-center flex-shrink-0">
+                <div className="w-20 h-20 rounded-md bg-secondary flex items-center justify-center flex-shrink-0">
                     <ImageIcon className="h-8 w-8 text-muted-foreground" />
                 </div>
             )}
-            <span className="text-lg font-medium">{option.text}</span>
+            <span className="text-lg font-semibold">{option.text}</span>
           </Label>
         ))}
       </RadioGroup>
       <Button
         type="submit"
         disabled={selectedOption === null || isVoting}
-        className={cn("w-full bg-accent text-accent-foreground hover:bg-accent/90 text-lg py-6")}
+        className={cn("w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6 font-bold")}
       >
-        {isVoting ? "Voting..." : "Vote"}
+        {isVoting ? "Voting..." : "Submit Vote"}
       </Button>
     </form>
   );
