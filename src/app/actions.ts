@@ -48,9 +48,42 @@ export async function suggestQuestionAction(topic: string) {
   }
 }
 
+function isVpn(headers: Headers): boolean {
+  // This is a basic check. More robust VPN detection requires a third-party service.
+  const knownVpnHeaders = [
+    'x-forwarded-for',
+    'x-forwarded-host',
+    'x-forwarded-server',
+    'forwarded',
+    'x-real-ip',
+    'via',
+    'cf-connecting-ip' // Cloudflare
+  ];
+
+  const headerList = Array.from(headers.keys());
+  let proxyHeaderCount = 0;
+
+  for (const header of headerList) {
+    if (knownVpnHeaders.includes(header.toLowerCase())) {
+      proxyHeaderCount++;
+    }
+  }
+
+  // If there's more than one proxy-related header, it might be a VPN.
+  // A direct connection will have very few of these.
+  // 'x-forwarded-for' is often present even without a VPN in many hosting environments.
+  return headers.has('via') || proxyHeaderCount > 2;
+}
+
+
 export async function voteAction(pollId: string, optionIndex: number) {
   'use server';
-  const ip = headers().get('x-forwarded-for') || '127.0.0.1';
+  const h = headers();
+  const ip = h.get('x-forwarded-for') || '127.0.0.1';
+
+  if (isVpn(h)) {
+    return { success: false, error: 'Voting via VPN or proxy is not allowed.' };
+  }
 
   try {
     const result = addVote(pollId, optionIndex, ip);
