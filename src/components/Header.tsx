@@ -11,8 +11,7 @@ export function Header() {
               <Image 
                 src="https://storage.googleapis.com/project-spark-341200.appspot.com/images%2Fteams%2Fteam_1724068777011_86400%2FGENERATED_1724070004077.png" 
                 alt="ग्राम पंचायत ककरारी logo" 
-                width={48}
-                height={48}
+                fill
                 className="object-contain"
               />
             </div>
