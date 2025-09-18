@@ -9,7 +9,7 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3 text-2xl font-bold font-headline text-primary">
             <div className="relative w-16 h-16">
               <Image 
-                src="/_next/image?url=https%3A%2F%2Fstorage.googleapis.com%2Fproject-spark-341200.appspot.com%2Fimages%252Fteams%252Fteam_1724068777011_86400%252FGENERATED_1724070004077.png&w=128&q=75" 
+                src="https://storage.googleapis.com/project-spark-341200.appspot.com/images%2Fteams%2Fteam_1724068777011_86400%2FGENERATED_1724070004077.png" 
                 alt="ग्राम पंचायत ककरारी logo" 
                 fill 
                 sizes="64px"
