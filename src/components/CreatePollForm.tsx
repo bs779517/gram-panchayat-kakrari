@@ -9,10 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createPollAction, suggestQuestionAction } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
-import { Lightbulb, PlusCircle, Trash2, WandSparkles } from "lucide-react";
+import { Lightbulb, PlusCircle, Trash2, WandSparkles, Image as ImageIcon } from "lucide-react";
 import React, { useCallback, useEffect, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import Image from "next/image";
 
 const pollFormSchema = z.object({
   question: z.string().min(5, {
@@ -20,7 +21,8 @@ const pollFormSchema = z.object({
   }),
   options: z.array(
     z.object({
-      value: z.string().min(1, { message: "Option cannot be empty." }),
+      text: z.string().min(1, { message: "Option cannot be empty." }),
+      imageUrl: z.string().url({ message: "Please enter a valid image URL." }).optional().or(z.literal('')),
     })
   ).min(2, { message: "At least two options are required." }),
 });
@@ -38,7 +40,7 @@ export function CreatePollForm() {
     mode: "onChange",
     defaultValues: {
       question: "",
-      options: [{ value: "" }, { value: "" }],
+      options: [{ text: "", imageUrl: "" }, { text: "", imageUrl: "" }],
     },
   });
 
@@ -48,6 +50,7 @@ export function CreatePollForm() {
   });
 
   const questionValue = form.watch("question");
+  const optionsValue = form.watch("options");
 
   const getSuggestion = useCallback(async (topic: string) => {
     if (topic.trim().length < 10) {
@@ -79,7 +82,8 @@ export function CreatePollForm() {
       const formData = new FormData();
       formData.append('question', data.question);
       data.options.forEach(option => {
-        formData.append('options[]', option.value);
+        formData.append('options[].text', option.text);
+        formData.append('options[].imageUrl', option.imageUrl || '');
       });
       try {
         await createPollAction(formData);
@@ -142,37 +146,60 @@ export function CreatePollForm() {
           <div className="space-y-4">
             <FormLabel className="text-lg">Answer Options</FormLabel>
             {fields.map((field, index) => (
-              <FormField
-                control={form.control}
-                key={field.id}
-                name={`options.${index}.value`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className="flex items-center gap-2">
-                        <Input placeholder={`Option ${index + 1}`} {...field} />
-                        {fields.length > 2 && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => remove(index)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+              <div key={field.id} className="space-y-2 p-4 border rounded-lg">
+                <FormField
+                  control={form.control}
+                  name={`options.${index}.text`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Option {index + 1}</FormLabel>
+                      <FormControl>
+                        <div className="flex items-center gap-2">
+                          <Input placeholder={`Option ${index + 1} text`} {...field} />
+                          {fields.length > 2 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => remove(index)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name={`options.${index}.imageUrl`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Image URL (Optional)</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                            <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input placeholder="https://example.com/image.png" {...field} className="pl-10" />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {optionsValue[index]?.imageUrl && (
+                  <div className="w-24 h-24 relative rounded-md overflow-hidden">
+                    <Image src={optionsValue[index].imageUrl!} alt={`Option ${index+1} preview`} fill style={{objectFit: 'cover'}} />
+                  </div>
                 )}
-              />
+              </div>
             ))}
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => append({ value: "" })}
+              onClick={() => append({ text: "", imageUrl: "" })}
             >
               <PlusCircle className="mr-2 h-4 w-4" />
               Add Option

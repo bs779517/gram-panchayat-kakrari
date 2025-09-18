@@ -1,18 +1,27 @@
 'use server';
 
 import { suggestQuestion as suggestQuestionFlow } from '@/ai/flows/ai-suggest-question';
-import { createPoll, addVote, getPoll } from '@/lib/polls';
+import { createPoll, addVote } from '@/lib/polls';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const createPollSchema = z.object({
   question: z.string().min(1, 'Question cannot be empty.'),
-  options: z.array(z.string().min(1, 'Option cannot be empty.')).min(2, 'Must have at least two options.'),
+  options: z.array(z.object({
+    text: z.string().min(1, 'Option cannot be empty.'),
+    imageUrl: z.string().url('Must be a valid URL.').optional().or(z.literal('')),
+  })).min(2, 'Must have at least two options.'),
 });
 
 export async function createPollAction(formData: FormData) {
   const question = formData.get('question') as string;
-  const options = formData.getAll('options[]').map(String).filter(opt => opt.trim() !== '');
+  const optionTexts = formData.getAll('options[].text').map(String);
+  const optionImageUrls = formData.getAll('options[].imageUrl').map(String);
+
+  const options = optionTexts.map((text, index) => ({
+    text,
+    imageUrl: optionImageUrls[index],
+  })).filter(opt => opt.text.trim() !== '');
 
   const validated = createPollSchema.safeParse({ question, options });
 

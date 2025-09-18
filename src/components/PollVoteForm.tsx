@@ -6,6 +6,8 @@ import { Button } from './ui/button';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Label } from './ui/label';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { ImageIcon } from 'lucide-react';
 
 type PollVoteFormProps = {
   poll: Poll;
@@ -32,12 +34,27 @@ export function PollVoteForm({ poll, onVote }: PollVoteFormProps) {
         aria-label="Poll options"
       >
         {poll.options.map((option, index) => (
-          <div key={index} className="flex items-center space-x-3">
-            <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-            <Label htmlFor={`option-${index}`} className="text-lg cursor-pointer">
-              {option.text}
-            </Label>
-          </div>
+          <Label 
+            key={index} 
+            htmlFor={`option-${index}`}
+            className={cn(
+                "flex items-center space-x-4 rounded-md border p-4 transition-colors cursor-pointer",
+                "hover:bg-accent/50",
+                selectedOption === index && "bg-accent/20 border-accent"
+            )}
+            >
+            <RadioGroupItem value={index.toString()} id={`option-${index}`} className="h-6 w-6"/>
+            {option.imageUrl ? (
+              <div className="w-20 h-20 relative rounded-md overflow-hidden flex-shrink-0">
+                <Image src={option.imageUrl} alt={option.text} fill style={{objectFit: 'cover'}} />
+              </div>
+            ) : (
+                <div className="w-20 h-20 rounded-md bg-muted flex items-center justify-center flex-shrink-0">
+                    <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                </div>
+            )}
+            <span className="text-lg font-medium">{option.text}</span>
+          </Label>
         ))}
       </RadioGroup>
       <Button

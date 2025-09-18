@@ -2,6 +2,7 @@
 export type PollOption = {
   text: string;
   votes: number;
+  imageUrl?: string;
 };
 
 export type Poll = {
@@ -17,10 +18,10 @@ const polls: Poll[] = [
         id: '1',
         question: 'What is the best programming language?',
         options: [
-            { text: 'TypeScript', votes: 25 },
-            { text: 'Python', votes: 30 },
-            { text: 'Rust', votes: 15 },
-            { text: 'Go', votes: 10 },
+            { text: 'TypeScript', votes: 25, imageUrl: 'https://picsum.photos/seed/p1/200/200' },
+            { text: 'Python', votes: 30, imageUrl: 'https://picsum.photos/seed/p2/200/200' },
+            { text: 'Rust', votes: 15, imageUrl: 'https://picsum.photos/seed/p3/200/200' },
+            { text: 'Go', votes: 10, imageUrl: 'https://picsum.photos/seed/p4/200/200' },
         ],
         totalVotes: 80,
     }
@@ -34,11 +35,11 @@ export function getPoll(id: string): Poll | undefined {
   return polls.find((p) => p.id === id);
 }
 
-export function createPoll(question: string, options: string[]): Poll {
+export function createPoll(question: string, options: { text: string; imageUrl?: string }[]): Poll {
   const newPoll: Poll = {
     id: (polls.length + 1).toString(),
     question,
-    options: options.map((opt) => ({ text: opt, votes: 0 })),
+    options: options.map((opt) => ({ text: opt.text, imageUrl: opt.imageUrl, votes: 0 })),
     totalVotes: 0,
   };
   polls.push(newPoll);
